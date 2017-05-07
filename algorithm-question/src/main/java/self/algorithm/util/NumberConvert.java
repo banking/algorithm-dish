@@ -28,6 +28,7 @@ public class NumberConvert {
             int i1 = convertDescToNumber("三千零六十三");
             int i2 = convertDescToNumber("一千六百万三千零五");
             int i3 = convertDescToNumber("十五亿二百万");
+
             /**
              * 这个异常还没有解决，乱序计数问题；
              */
