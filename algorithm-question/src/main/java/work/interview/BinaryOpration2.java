@@ -8,11 +8,10 @@ import java.util.ArrayList;
  *
  * 异或的英文单词：exclusive or
  */
-public class BinaryOpration1 {
+public class BinaryOpration2 {
 
     public static void main(String args[]) {
-
-        function(new int[]{9,4,70}, new int[]{9 , 3 ,5, 4, 70});
+        function(new int[]{9, 4, 70}, new int[]{9, 3, 5, 4, 70});
     }
 
     public static int[] function(int[] rawArray1, int[] rawArray2) {
@@ -29,7 +28,6 @@ public class BinaryOpration1 {
             if ((exclusiveOrSum & (int)(Math.pow(2, indexLastBit1))) > 0) {
                 break;
             }
-            //todo handle exception
             indexLastBit1 ++;
         }
         int spiltNum = (int)(Math.pow(2, indexLastBit1));
@@ -47,8 +45,8 @@ public class BinaryOpration1 {
                 result[1] = result[1] ^ j;
             }
         }
-        System.out.println("first num:" + result[0]);
-        System.out.println("second num:" + result[1]);
+//        System.out.println("first num:" + result[0]);
+//        System.out.println("second num:" + result[1]);
         return result;
     }
 }

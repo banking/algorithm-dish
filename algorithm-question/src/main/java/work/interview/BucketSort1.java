@@ -7,7 +7,7 @@ package work.interview;
 public class BucketSort1 {
 
     public static void main(String args[]) {
-        sortfunction(100, new int[]{9 , 10 ,9, 80, 4, 4, 4});
+        sortfunction(100, new int[]{9 ,10 ,9, 80, 4, 4, 4});
     }
 
     public static int sortfunction(int count, int[] rawDatas) {
@@ -18,8 +18,9 @@ public class BucketSort1 {
                 maxOccurTimes = datas[i];
             }
         }
-        System.out.print(maxOccurTimes);
+        //        for(int i : rawDatas) maxOccurTimes = maxOccurTimes < ++datas[i]? datas[i] : maxOccurTimes;
+//        System.out.print(maxOccurTimes);
         return maxOccurTimes;
-//        for(int i : rawDatas) maxOccurTimes = maxOccurTimes < ++datas[i]? datas[i] : maxOccurTimes;
+
     }
 }
