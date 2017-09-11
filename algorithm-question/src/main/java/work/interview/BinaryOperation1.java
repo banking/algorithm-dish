@@ -1,7 +1,7 @@
 package work.interview;
 
 /**
- * Created by didi on 17/5/10.
+ * Created by banking on 17/5/10.
  * 问题描述：有一个正整数数组长度为N，和另一个正整数数组长度为N+1。其中N个数都相同，求出不同的数
  *
  * 异或的英文单词：exclusive or
