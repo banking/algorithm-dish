@@ -390,16 +390,11 @@ public class NumberConvert {
                 }
                 throw new Exception("非法字符出现于" + i);
             }
-		/*finalResult += tempResult;
-		finalResult += temp;*/
-            //finalResult = BigInteger.valueOf(finalResult.intValue()+tempResult+temp);
             finalResult = finalResult.add(tempResult);
             finalResult = finalResult.add(BigInteger.valueOf(temp));
 
-            //System.out.println("finalResult.longValue()"+finalResult.longValue());
             if (finalResult.doubleValue() > Integer.MAX_VALUE) {
-                //数字过大时，当然也有可能
-                throw new Exception("数字太大了，超过了整形最大范围！");
+                throw new Exception("超过了Integer的最大范围！");
             }
             return finalResult.intValue();
         }
