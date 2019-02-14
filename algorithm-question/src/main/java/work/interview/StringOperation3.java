@@ -1,0 +1,148 @@
+package work.interview;
+
+/**
+ * Wildcard Matching
+ *
+ * Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*'.
+ *
+ * '?' Matches any single character.
+ * '*' Matches any sequence of characters (including the empty sequence).
+ * The matching should cover the entire input string (not partial).
+ *
+ * Note:
+ *
+ * s could be empty and contains only lowercase letters a-z.
+ * p could be empty and contains only lowercase letters a-z, and characters like ? or *.
+ * Example 1:
+ *
+ * Input:
+ * s = "aa"
+ * p = "a"
+ * Output: false
+ * Explanation: "a" does not match the entire string "aa".
+ * Example 2:
+ *
+ * Input:
+ * s = "aa"
+ * p = "*"
+ * Output: true
+ * Explanation: '*' matches any sequence.
+ * Example 3:
+ *
+ * Input:
+ * s = "cb"
+ * p = "?a"
+ * Output: false
+ * Explanation: '?' matches 'c', but the second letter is 'a', which does not match 'b'.
+ * Example 4:
+ *
+ * Input:
+ * s = "adceb"
+ * p = "*a*b"
+ * Output: true
+ * Explanation: The first '*' matches the empty sequence, while the second '*' matches the substring "dce".
+ * Example 5:
+ *
+ * Input:
+ * s = "acdcb"
+ * p = "a*c?b"
+ * Output: false
+ */
+
+/**
+ * Time limit failed.
+ */
+public class StringOperation3 {
+    boolean hasTrimP = false;
+    public boolean isMatch(String s, String p) {
+        //todo trim * in p
+        if (!hasTrimP) {
+            p = trimP(p);
+            System.out.println(p);
+            hasTrimP = true;
+        }
+
+        int indexS = 0;
+        int indexP = 0;
+
+        while (indexP < p.length()) {
+            String charP = p.substring(indexP, indexP + 1);
+            if (charP.equals("?")) {
+                if (indexS >= s.length()) {
+                    return false;
+                }
+                indexS++;
+            } else if (charP.equals("*")) {
+                if (indexP == p.length() - 1) { //最后一个*的情况
+                    return true;
+                }
+                boolean matchAny = false;
+                String remainP = p.substring(indexP + 1, p.length());
+                int remindSIndex = indexS;
+                while (remindSIndex <= s.length()) {
+                    String remindS = s.substring(remindSIndex, s.length());
+                    matchAny = isMatch(remindS, remainP);
+                    if (matchAny) {
+                        return true;
+                    }
+                    remindSIndex++;
+                }
+                return false;
+            } else {
+                if (indexS >= s.length()) {
+                    return false;
+                }
+                if (!charP.equals(s.substring(indexS, indexS + 1))) {
+                    return false;
+                }
+                indexS++;
+            }
+            indexP++;
+        }
+        if (indexS < s.length()) {
+            return false;
+        }
+        return true;
+    }
+
+    public String trimP(String rawP) {
+        int firstStar = rawP.indexOf("*");
+        int lastStar = rawP.lastIndexOf("*");
+        if (firstStar >= 0 && firstStar != lastStar) {
+            char[] charArray = rawP.toCharArray();
+            boolean preStar = false;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < charArray.length; i++) {
+                if ("*".equals(String.valueOf(charArray[i]))) {
+                    if (preStar) {
+                        continue;
+                    } else {
+                        builder.append(charArray[i]);
+                        preStar = true;
+                    }
+                } else {
+                    preStar = false;
+                    builder.append(charArray[i]);
+                }
+            }
+            return builder.toString();
+        } else {
+            return rawP;
+        }
+
+    }
+
+    public static void main(String args[]) {
+
+
+        String s = "abc";
+//        System.out.println(s.substring(3,3));
+//        System.out.println(new StringOperation3().isMatch("pi", "?i*pi"));
+//        System.out.println(new StringOperation3().isMatch("mississippi", "m??*ss*?i*pi"));
+//        System.out.println(new StringOperation3().isMatch("ho", "ho**"));
+//        System.out.println(new StringOperation3().isMatch("aa", "a"));
+//        System.out.println(new StringOperation3().isMatch("adceb", "*a*b"));
+//        System.out.println(new StringOperation3().isMatch("bbbbbbbabbaabbabbbbaaabbabbabaaabbababbbabbbabaaabaab", "b*b*ab**ba*b**b***bba"));
+        System.out.println(new StringOperation3().isMatch("abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb", "**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb"));
+    }
+}
