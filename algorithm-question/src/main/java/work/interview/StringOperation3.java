@@ -50,18 +50,19 @@ package work.interview;
  */
 
 /**
- * Time limit failed.
+ * isMatch1() Time limit failed.
+ * 经典的解法，使用二位数组memo(备忘录)缓存之前的计算结果。
+ * Boolean[targetX][targetY]是被否赋值来决定是否进行重复计算。
  */
 public class StringOperation3 {
     boolean hasTrimP = false;
-    public boolean isMatch(String s, String p) {
-        //todo trim * in p
+    public boolean isMatch1(String s, String p) {
         if (!hasTrimP) {
             p = trimP(p);
             System.out.println(p);
             hasTrimP = true;
         }
-
+        System.out.println(p);
         int indexS = 0;
         int indexP = 0;
 
@@ -81,7 +82,7 @@ public class StringOperation3 {
                 int remindSIndex = indexS;
                 while (remindSIndex <= s.length()) {
                     String remindS = s.substring(remindSIndex, s.length());
-                    matchAny = isMatch(remindS, remainP);
+                    matchAny = isMatch1(remindS, remainP);
                     if (matchAny) {
                         return true;
                     }
@@ -132,6 +133,42 @@ public class StringOperation3 {
 
     }
 
+    Boolean[][] datas;
+    public boolean isMatch2(String s, String p) {
+        if (!hasTrimP) {
+            p = trimP(p);
+            System.out.println(p);
+            hasTrimP = true;
+        }
+        datas = new Boolean[s.length()+1][p.length()+1];
+        return match(s, p, 0, 0);
+    }
+
+
+    private boolean match(String s, String p, int i, int j) {
+        if (datas[i][j] != null) { //import for use cache data
+            return datas[i][j];
+        }
+        if (j == p.length()) {
+            datas[i][j] = i == s.length();
+            return datas[i][j];
+        }
+
+        char c = p.charAt(j);
+        if(c == '*') {
+            boolean useStar = i < s.length() && match(s, p, i+1, j);
+            boolean notUseStar = match(s, p, i, j+1);
+            datas[i][j] = useStar || notUseStar;
+            return datas[i][j];
+        } else if (c == '?') {
+            datas[i][j] = i < s.length() && match(s, p, i+1, j+1);
+            return datas[i][j];
+        } else {
+            datas[i][j] = i < s.length() && c == s.charAt(i) && match(s, p, i+1, j+1);
+            return datas[i][j];
+        }
+    }
+
     public static void main(String args[]) {
 
 
@@ -143,6 +180,6 @@ public class StringOperation3 {
 //        System.out.println(new StringOperation3().isMatch("aa", "a"));
 //        System.out.println(new StringOperation3().isMatch("adceb", "*a*b"));
 //        System.out.println(new StringOperation3().isMatch("bbbbbbbabbaabbabbbbaaabbabbabaaabbababbbabbbabaaabaab", "b*b*ab**ba*b**b***bba"));
-        System.out.println(new StringOperation3().isMatch("abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb", "**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb"));
+        System.out.println(new StringOperation3().isMatch2("abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb", "**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb"));
     }
 }
