@@ -3,7 +3,7 @@ package work.interview.design;
 public class SingleTonStatic {
 
 
-    private SingleTon() {
+    private SingleTonStatic() {
 
     }
 

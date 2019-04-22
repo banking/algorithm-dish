@@ -27,9 +27,123 @@ import java.util.Stack;
 
 public class Calculator {
 
-
     public int calculate(String s) {
-        String input = s.trim() + "+";
+        String input = s.trim();
+        Stack<String> stack = new Stack<>();
+        boolean numBuildFlag = false;
+        for(int i = 0;i<input.length();i++) {
+            char c = input.charAt(i);
+            if (c == '+') {
+                numBuildFlag = false;
+                tryCalLastExpression(stack);
+                continue;
+            }
+            if (c == '-') {
+                numBuildFlag = false;
+                tryCalLastExpression(stack);
+                stack.push(c + "");
+                continue;
+            }
+            if (c == '*') {
+                numBuildFlag = false;
+                tryCalLastExpression(stack);
+                stack.push(c + "");
+                continue;
+            }
+            if (c == '/') {
+                numBuildFlag = false;
+                tryCalLastExpression(stack);
+                stack.push(c + "");
+                continue;
+            }
+            if (c == ' ') {
+                if (i == input.length() - 1) {
+                    tryCalLastExpression(stack);
+                }
+                continue;
+            }
+            if (stack.isEmpty()) {
+                numBuildFlag = true;
+                stack.push(c + "");
+                continue;
+            }
+            //当前字符是数字
+            String lastStr = stack.peek();
+            switch (lastStr) {
+                case "-":
+                    stack.pop();
+                    numBuildFlag = true;
+                    stack.push("-" + c);
+                    break;
+                case "*":
+                    numBuildFlag = true;
+                    stack.push( c + "");
+                    break;
+                case "/":
+                    numBuildFlag = true;
+                    stack.push(c + "");
+                    break;
+                default:
+                    if (numBuildFlag) {
+                        int lastNum = Integer.parseInt(stack.pop());
+                        if (lastNum > 0) {
+                            lastNum = lastNum * 10 + Integer.parseInt(c + "");
+                        } else {
+                            lastNum = lastNum * 10 - Integer.parseInt(c + "");
+                        }
+                        stack.push(lastNum + "");
+                    } else {
+                        numBuildFlag = true;
+                        stack.push(c + "");
+                    }
+
+                    break;
+            }
+            if (i == input.length() - 1) {
+                tryCalLastExpression(stack);
+            }
+        }
+        int result = 0;
+        while (!stack.isEmpty()) {
+            result += Integer.parseInt(stack.pop());
+        }
+        return result;
+    }
+
+    public void tryCalLastExpression(Stack<String> stack) {
+        if (stack.isEmpty()) {
+            return;
+        }
+        String preNumStr = stack.pop();
+        if (stack.isEmpty()) {
+            stack.push(preNumStr);
+            return;
+        }
+        String pre2Str = stack.peek();
+        if (pre2Str.equals("*") || pre2Str.equals("/")) {
+            stack.pop();
+        } else {
+            stack.push(preNumStr);
+            return;
+        }
+        if (stack.isEmpty()) {
+            //throw some exception
+            return;
+        }
+        String calStr = "";
+        String pre3NumStr = stack.pop();
+        if (pre2Str.equals("*")) {
+            calStr = Integer.parseInt(pre3NumStr) * Integer.parseInt(preNumStr) + "";
+        }
+        if (pre2Str.equals("/")) {
+            calStr = Integer.parseInt(pre3NumStr) / Integer.parseInt(preNumStr) + "";
+        }
+        stack.push(calStr);
+
+    }
+
+    public int calculate2(String s) {
+        String input = s.trim();
         Stack<String> stack = new Stack<>();
         boolean numBuildFlag = false;
         for(int i = 0;i<input.length();i++) {
@@ -165,6 +279,8 @@ public class Calculator {
 //        System.out.println(new Calculator().calculate("0-2147483647"));
 
 //        System.out.println(new Calculator().calculate("1*2-3/4+5*6-7*8+9/10"));
-        System.out.println(new Calculator().calculate("583+17871/7*21/52/9"));//+1692/6+112*4+288/2+8/3*67*4+6744/4-9480/7-1*6*3*5*2+5993
+//        System.out.println(new Calculator().calculate("3+2*2"));
+        System.out.println(new Calculator().calculate("1+2+3+4+5+6+7+8+9+10"));
+//        System.out.println(new Calculator().calculate("583+17871/7*21/52/9"));//+1692/6+112*4+288/2+8/3*67*4+6744/4-9480/7-1*6*3*5*2+5993
     }
 }
