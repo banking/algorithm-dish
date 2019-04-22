@@ -62,16 +62,52 @@ public class Solution {
      * @param day End - No meetings can be scheduled after this
      */
     public static List<Time> findFreeTime(List<List<Time>> times, int dayStart, int dayEnd) {
-
+        int allBusyTimesInt = 0;
+        for(List<Time> timeList : times) {
+            allBusyTimesInt |= timeDescToIntBit(timeList);
+        }
+        int freeTimeInt = allBusyTimesInt ^ (Math.pow(2, 10));
+        List<Time> freeTimeList = intBitToTimeDesc(freeTimeInt);
+        return freeTimeList;
     }
-}
-
-class Time {
-    int start;
-    int end;
-
-    public Time(int s, int e) {
-        start = s;
-        end = e;
+    static int[] timeStarts = new int[] {9,10,11,12,13,14,15,16,17,18};
+    public static  List<Time> intBitToTimeDesc(int timeInt) {
+        List<Time> timeList = new ArrayList<>();
+        for(int i=0;i<timeStarts.length;i++) {
+            if ((timeInt >> i) & 1 > 0) {
+                if (timeList.size() > 0) {
+                    Time lastTime = timeList.get(timeList.size() -1);
+                    if (lastTime.end - 9 == i) {
+                        lastTime.end ++;
+                        continue;
+                    } else {
+                        Time time = new Time(9+i,9+i+1);
+                        timeList.add(time);
+                    }
+                } else {
+                    Time time = new Time(9+i,9+i+1);
+                    timeList.add(time);
+                }
+            }
+        }
+        return timeList;
+    }
+    public static int timeDescToIntBit(List<Time> times) {
+        int timeIndex = 0;
+        int result = 0;
+        Time timeTemp = null;
+        for(int i = 0; i< timeStarts.length;) {
+            if(timeTemp == null) {
+                timeTemp = timeStart.get(i);
+            }
+            i += 1 << (timeTemp.start - 9);
+            if (timeTemp.end - timestart > 1) {
+                timestart += 1;
+            } else {
+                timeTemp = null;
+                i++;
+            }
+        }
+        return result;
     }
 }
